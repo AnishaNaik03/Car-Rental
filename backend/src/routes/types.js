@@ -1,9 +1,6 @@
-// routes/types.js
 const express = require('express');
 const router = express.Router();
-const { VehicleType } = require('../models'); // Sequelize model
-
-// GET /api/types?wheels=2
+const { VehicleType } = require('../models'); 
 router.get('/', async (req, res) => {
   try {
     const { wheels } = req.query;

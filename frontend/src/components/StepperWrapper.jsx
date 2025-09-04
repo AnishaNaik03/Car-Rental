@@ -57,7 +57,7 @@ export default function BookingWizard() {
 
   // Final submission
   const submit = async () => {
-    setError("");
+    // setError("");
 
     const payload = {
       firstName: firstName.trim(),
@@ -134,7 +134,9 @@ export default function BookingWizard() {
               key={t.id}
               onClick={() => setSelectedType(t.id)}
               style={{
-                background: selectedType === t.id ? "lightblue" : "white",
+                background: selectedType === t.id ? "white" : "black",
+                    color: selectedType === t.id ? "black" : "white",
+
               }}
             >
               {t.name}
@@ -142,7 +144,7 @@ export default function BookingWizard() {
           ))}
           <br />
           <button onClick={back}>Back</button>
-          <button onClick={next}>
+          <button onClick={next} disabled={!selectedType}>
             Next
           </button>
         </div>
@@ -156,7 +158,9 @@ export default function BookingWizard() {
               key={v.id}
               onClick={() => setSelectedVehicle(v.id)}
               style={{
-                background: selectedVehicle === v.id ? "lightgreen" : "white",
+                background: selectedVehicle === v.id ? "white" : "black",
+                color: selectedType === v.id ? "black" : "white",
+
               }}
             >
               {v.name}
@@ -164,7 +168,7 @@ export default function BookingWizard() {
           ))}
           <br />
           <button onClick={back}>Back</button>
-          <button onClick={next}>
+          <button onClick={next}isabled={!selectedVehicle}>
             Next
           </button>
         </div>

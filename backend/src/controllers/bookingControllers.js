@@ -1,47 +1,23 @@
-// const { Booking } = require("../models"); // Sequelize model (or whatever ORM you use)
-
-// // Create new booking
-// exports.createBooking = async (req, res) => {
-//   try {
-//     const { customerName, vehicleId, startDate, endDate } = req.body;
-//     console.log("Booking request body:", req.body);
-
-//     const booking = await Booking.create({
-//       customerName,
-//       vehicleId,
-//       startDate,
-//       endDate,
-//     });
-
-//     res.status(201).json(booking);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ error: "Failed to create booking" });
-//   }
-// };
-
-// // Get all bookings
-// exports.getBookings = async (req, res) => {
-//   try {
-//     const bookings = await Booking.findAll();
-//     res.json(bookings);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ error: "Failed to fetch bookings" });
-//   }
-// };
-const { Booking } = require("../models"); // Sequelize model
+const { Booking } = require("../models");
 
 // Create new booking
 exports.createBooking = async (req, res) => {
   try {
     const { firstName, lastName, vehicleId, startDate, endDate } = req.body;
-    console.log("Booking request body:", req.body);
+     const existingBooking = await Booking.findOne({
+      where: {
+        vehicleId,
+        startDate,  // you can also add an Op.between check for overlapping
+        endDate,
+      },
+    });
 
-    const customerName = `${firstName.trim()} ${lastName.trim()}`;
-
+    if (existingBooking) {
+      return res.status(400).json({ error: "This vehicle is already booked for the selected dates." });
+    }
     const booking = await Booking.create({
-      customerName,
+      firstName,
+      lastName,
       vehicleId,
       startDate,
       endDate,
@@ -50,7 +26,7 @@ exports.createBooking = async (req, res) => {
     res.status(201).json(booking);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Failed to create booking" });
+    res.status(500).json({ error: "This vehicle is already booked for the selected dates." });
   }
 };
 
@@ -64,4 +40,3 @@ exports.getBookings = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch bookings" });
   }
 };
-
